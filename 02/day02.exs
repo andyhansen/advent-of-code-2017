@@ -1,13 +1,13 @@
 defmodule CaptchaSolver do
-    def get_value([head | tail], accumulator) do
-        if (head == List.first(tail)) do
-            get_value(tail, head + accumulator)
-        else
-            get_value(tail, accumulator)
-        end
+    def get_value([head1 | tail1], [head2 | tail2], accumulator) do
+      if head1 == head2 do
+        get_value(tail1, tail2, accumulator + (head1 * 2))
+      else
+        get_value(tail1, tail2, accumulator)
+      end
     end
 
-    def get_value([], accumulator) do
+    def get_value([], [], accumulator) do
         accumulator
     end
 end
@@ -17,7 +17,8 @@ nums = File.read!("input.txt")
         |> String.graphemes
         |> Enum.map(&(String.to_integer(&1)))
 
-startValue = if List.first(nums) == List.last(nums), do: List.first(nums), else: 0
-result = CaptchaSolver.get_value(nums, startValue)
+total_nums = length(nums)
+first_half = Enum.slice(nums, 0, div(total_nums, 2))
+last_half = Enum.slice(nums, div(total_nums, 2), total_nums)
 
-IO.puts result
+IO.puts CaptchaSolver.get_value(first_half, last_half, 0)
