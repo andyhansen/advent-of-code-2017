@@ -13,7 +13,10 @@ defmodule CaptchaSolver do
 end
 
 
-nums = Enum.map(String.graphemes(File.read!("input.txt")), fn x -> String.to_integer(x) end)
+nums = File.read!("input.txt") 
+        |> String.graphemes
+        |> Enum.map(&(String.to_integer(&1)))
+
 startValue = if List.first(nums) == List.last(nums), do: List.first(nums), else: 0
 result = CaptchaSolver.get_value(nums, startValue)
 
